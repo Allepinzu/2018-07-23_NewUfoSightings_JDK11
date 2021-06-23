@@ -33,7 +33,7 @@ public class FXMLController {
     private Button btnSelezionaAnno;
 
     @FXML
-    private ComboBox<?> cmbBoxForma;
+    private ComboBox<String> cmbBoxForma;
 
     @FXML
     private Button btnCreaGrafo;
@@ -50,16 +50,39 @@ public class FXMLController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
 
+    	model.creaGrafo(Integer.parseInt(this.txtAnno.getText()), this.cmbBoxForma.getValue());
+    	this.txtResult.clear();
+    	this.txtResult.appendText(model.VA()+"\n");
+    	this.txtResult.appendText(model.stampaVicini());
     }
 
     @FXML
     void doSelezionaAnno(ActionEvent event) {
-
+    	
+        try{
+      	  int n = Integer.parseInt(this.txtAnno.getText());
+        
+        if(n<1910||n>2015) {
+      	  this.txtResult.setText("Inserisci un anno valido");
+        }
+        else {
+      	  this.cmbBoxForma.getItems().addAll(model.listaForme(n));
+      	  
+        }
+        
+        }catch(NumberFormatException ne) {
+          	  this.txtResult.setText("Inserisci un anno valido");
+          	  
+          	  
+            }
     }
 
     @FXML
     void doSimula(ActionEvent event) {
-
+    model.init(Integer.parseInt(this.txtAnno.getText()),this.cmbBoxForma.getValue(),Integer.parseInt(this.txtAlfa.getText() ));
+      model.run();
+      this.txtResult.clear();
+      this.txtResult.appendText(this.model.pericolo());
     }
 
     @FXML
